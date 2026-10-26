@@ -1,7 +1,7 @@
 import express, { Request, Response, NextFunction } from "express";
 import { pool } from "./db.js";
 import { devAuth } from "./middleware/devAuth.js";
-import customersRouter from "./routes/customers.routes.js";
+import customerRoutes from "./routes/customers.routes.js";
 
 const app = express();
 
@@ -27,7 +27,7 @@ app.get("/api", (req: Request, res: Response) => {
 
 //routers
 
-app.use("/api/customers", customersRouter);
+app.use("/api/customers", customerRoutes);
 
 // 404: no route matched (after all routes)
 app.use((req: Request, res: Response) => {
