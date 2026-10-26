@@ -7,12 +7,17 @@ const router = Router();
 // "/api/customers"
 
 router.get("/", async (req: Request, res: Response) => {
-  const result = await pool.query(
-    "SELECT * FROM customers WHERE company_id = $1 ORDER BY NAME",
-    [req.companyId],
-  );
-  res.json({ success: true, data: result.rows });
-  console.log("just a console log check");
+  try {
+    const result = await pool.query(
+      "SELECT * FROM customers WHERE company_id = $1",
+      [req.companyId],
+    );
+    res.status(200).json({ success: true, data: result.rows });
+    console.log("console log check");
+  } catch (error: any) {
+    console.error(error);
+    res.status(500).json({ success: false, message: "internal server error" });
+  }
 });
 
 export default router;
