@@ -1,6 +1,7 @@
-import express, { Request, Response } from "express";
+import express, { Request, Response, NextFunction } from "express";
 import { pool } from "./db.js";
 import { devAuth } from "./middleware/devAuth.js";
+import customersRouter from "./routes/customers.routes.js";
 
 const app = express();
 
@@ -22,6 +23,21 @@ app.get("/health", async (req: Request, res: Response) => {
 app.use(devAuth);
 app.get("/api", (req: Request, res: Response) => {
   res.json({ success: true, message: "Roster API is running" });
+});
+
+//routers
+
+app.use("/api/customers", customersRouter);
+
+// 404: no route matched (after all routes)
+app.use((req: Request, res: Response) => {
+  res.status(404).json({ success: false, error: "Not found" });
+});
+
+//general 500 status error
+app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
+  console.error(err);
+  res.status(500).json({ success: false, error: "Internal server error" });
 });
 
 export default app;
