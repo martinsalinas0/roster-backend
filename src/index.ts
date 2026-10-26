@@ -10,6 +10,15 @@ app.get("/health", (_req, res) => {
   res.json({ status: "ok" });
 });
 
-app.listen(PORT, () => {
-  console.log(`Server running on http://localhost:${PORT}`);
-});
+const startServer = async (): Promise<void> => {
+  try {
+    app.listen(PORT, () => {
+      console.log(`    Server is running on http://localhost:${PORT}`);
+    });
+  } catch (error) {
+    console.error("Failed to connect to database or start server:", error);
+    process.exit(1);
+  }
+};
+
+startServer();
